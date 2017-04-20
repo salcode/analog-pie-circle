@@ -9,6 +9,7 @@ class analogPieCircleView extends Ui.WatchFace {
 	// The hour hand is 50% of the radius (i.e. max hand length).
 	hidden const HOUR_HAND_FRACTION  = 0.60;
 	hidden const MINUTES_PER_HOUR    = 60.0;
+	hidden const SECONDS_PER_MINUTE  = 60.0;
 	hidden const MINUTES_IN_12_HOURS = 12.0 * 60.0;
 	hidden const ANGLE_INCREMENT     = Math.PI / 30.0;  // One sixtyth of a rotation.
 	hidden const ANGLE_BETWEEN_HOURS = Math.PI / 6.0;   // One twelfth of a rotation.
@@ -16,6 +17,9 @@ class analogPieCircleView extends Ui.WatchFace {
 	hidden const BACKGROUND_COLOR    = Gfx.COLOR_BLACK;
 	hidden const HOUR_HAND_COLOR     = Gfx.COLOR_ORANGE;
 	hidden const HOUR_HAND_WIDTH     = 4;
+	hidden const SECOND_HAND_FRACTION = 0.95;
+	hidden const SECOND_HAND_COLOR   = Gfx.COLOR_RED;
+	hidden const SECOND_HAND_WIDTH   = 1;
 	hidden const MINUTE_HAND_COLOR   = Gfx.COLOR_WHITE;
 	hidden const DIAL_MARKER_COLOR   = Gfx.COLOR_LT_GRAY;
 	hidden const DIAL_MARKER_HOUR_LENGTH   = 10;
@@ -23,7 +27,7 @@ class analogPieCircleView extends Ui.WatchFace {
 	hidden const DIAL_MARKER_WIDTHS        = 2;
 	
 	
-	hidden var radius, centerX, centerY, minX, minY, maxX, maxY;
+	hidden var radius, centerX, centerY, minX, minY, maxX, maxY, isAwake;
 
     function initialize() {
         WatchFace.initialize();
@@ -62,7 +66,10 @@ class analogPieCircleView extends Ui.WatchFace {
     	var time = Sys.getClockTime();
     	drawMinuteHand(dc, time.min);
     	drawHourHand(dc, time.hour, time.min);
-    	drawDial(dc);
+    	if ( isAwake ) {
+    		drawSecondHand(dc, time.sec);
+    	}
+    	drawDial(dc);    	
     }
     
     hidden function drawDial(dc) {
@@ -106,6 +113,19 @@ class analogPieCircleView extends Ui.WatchFace {
             coords[0], coords[1]
         );
     }
+    
+    hidden function drawSecondHand(dc, seconds) {
+    	var angle  = getAngle( seconds, SECONDS_PER_MINUTE );
+    	var coords = getPointOnCircle( angle, radius * SECOND_HAND_FRACTION );
+     	dc.setColor(SECOND_HAND_COLOR, BACKGROUND_COLOR);
+        dc.setPenWidth(SECOND_HAND_WIDTH);
+        dc.drawLine(
+            centerX, centerY,
+            coords[0], coords[1]
+        );
+    	 
+    }
+    
     
     hidden function drawMinuteHand(dc, minutes) {
     	var angle = getAngle(minutes, MINUTES_PER_HOUR);
@@ -159,10 +179,13 @@ class analogPieCircleView extends Ui.WatchFace {
 
     // The user has just looked at their watch. Timers and animations may be started here.
     function onExitSleep() {
+    	isAwake = true;
     }
 
     // Terminate any active timers and prepare for slow updates.
     function onEnterSleep() {
+        isAwake = false;
+        Ui.requestUpdate();
     }
 
 }
