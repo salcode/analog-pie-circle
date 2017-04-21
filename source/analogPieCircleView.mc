@@ -19,7 +19,7 @@ class analogPieCircleView extends Ui.WatchFace {
 	hidden const HOUR_HAND_WIDTH     = 4;
 	hidden const SECOND_HAND_FRACTION = 0.95;
 	hidden const SECOND_HAND_COLOR   = Gfx.COLOR_RED;
-	hidden const SECOND_HAND_WIDTH   = 1;
+	hidden const SECOND_HAND_WIDTH   = 2;
 	hidden const MINUTE_HAND_COLOR   = Gfx.COLOR_WHITE;
 	hidden const DIAL_MARKER_COLOR   = Gfx.COLOR_LT_GRAY;
 	hidden const DIAL_MARKER_HOUR_LENGTH   = 10;
