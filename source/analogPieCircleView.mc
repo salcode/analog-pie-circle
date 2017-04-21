@@ -5,7 +5,7 @@ using Toybox.Lang as Lang;
 
 class analogPieCircleView extends Ui.WatchFace {
 
-	
+	hidden const GOLDEN_RATIO        = 1.6180339887;
 	// The hour hand is 50% of the radius (i.e. max hand length).
 	hidden const HOUR_HAND_FRACTION  = 0.60;
 	hidden const MINUTES_PER_HOUR    = 60.0;
@@ -25,6 +25,9 @@ class analogPieCircleView extends Ui.WatchFace {
 	hidden const DIAL_MARKER_HOUR_LENGTH   = 10;
 	hidden const DIAL_MARKER_MINUTE_LENGTH = 3;
 	hidden const DIAL_MARKER_WIDTHS        = 2;
+	hidden const BATTERY_HEIGHT            = 12;
+	hidden const BATTERY_FG_COLOR          = Gfx.COLOR_WHITE;
+	hidden const BATTERY_BG_COLOR          = Gfx.COLOR_LT_GRAY;
 	
 	
 	hidden var radius, centerX, centerY, minX, minY, maxX, maxY, isAwake;
@@ -69,7 +72,27 @@ class analogPieCircleView extends Ui.WatchFace {
     	if ( isAwake ) {
     		drawSecondHand(dc, time.sec);
     	}
-    	drawDial(dc);    	
+    	drawDial(dc);
+    	drawBattery(dc);    	
+    }
+    
+    hidden function drawBattery(dc) {
+    	var paddingFromBottom = 5;
+    	var batteryEndWidth   = 3;
+    	var batteryPercent    = Sys.getSystemStats().battery;
+    	var height = BATTERY_HEIGHT;
+    	var width  = BATTERY_HEIGHT * GOLDEN_RATIO;
+    	var x      = minX - width;
+    	var y      = maxY - height - paddingFromBottom; 
+    	dc.setColor(BATTERY_BG_COLOR, BACKGROUND_COLOR);
+    	
+    	// Battery background.
+    	dc.fillRectangle(x, y, width, height);                             // Battery body.
+    	dc.fillRectangle(x + width - 1, y + 2, batteryEndWidth, height-4); // Battery end.
+    	
+    	// Charged part of Battery.
+    	dc.setColor(BATTERY_FG_COLOR, BACKGROUND_COLOR);
+    	dc.fillRectangle(x, y, width * ( batteryPercent / 100 ), height);    
     }
     
     hidden function drawDial(dc) {
