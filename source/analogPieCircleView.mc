@@ -156,21 +156,12 @@ class analogPieCircleView extends Ui.WatchFace {
 
     	dc.setColor(MINUTE_HAND_COLOR, BACKGROUND_COLOR);
 
-        var points = [
-        	[centerX, minY],    // 12 o'clock, top center point
-        	[centerX, centerY]  // center
-        ];
+    	dc.setPenWidth(maxX-centerX);
 
-        // Add point for current minute.
-        points.add( getPointOnCircle(angle, radius) );
-
-        // Fill out polygon with faux circle going back to zero minutes.
-        for ( angle = angle; angle > 0; angle -= ANGLE_INCREMENT ) {
-        	points.add( getPointOnCircle(angle, radius) );
-        }
-
-    	// Draw pie
-    	dc.fillPolygon( points );
+     	var arcRadius = (maxX-centerX)/2;
+     	var arcAngle = 90 - ( 180 * angle / ( Math.PI ) );
+     	// drawArc(x, y, r, attr, degreeStart, degreeEnd)
+     	dc.drawArc(centerX, centerY, arcRadius, Gfx.ARC_CLOCKWISE, 90, arcAngle );
     }
 
     /**
