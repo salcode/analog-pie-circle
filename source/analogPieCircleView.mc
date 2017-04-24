@@ -24,7 +24,8 @@ class analogPieCircleView extends Ui.WatchFace {
 	hidden const DIAL_MARKER_COLOR   = Gfx.COLOR_LT_GRAY;
 	hidden const DIAL_MARKER_HOUR_LENGTH   = 10;
 	hidden const DIAL_MARKER_MINUTE_LENGTH = 3;
-	hidden const DIAL_MARKER_WIDTHS        = 2;
+	hidden const DIAL_MARKER_HOUR_WIDTH    = 4;
+	hidden const DIAL_MARKER_MINUTE_WIDTH  = 2;
 	hidden const BATTERY_HEIGHT            = 12;
 	hidden const BATTERY_FG_COLOR          = Gfx.COLOR_WHITE;
 	hidden const BATTERY_BG_COLOR          = Gfx.COLOR_LT_GRAY;
@@ -102,12 +103,15 @@ class analogPieCircleView extends Ui.WatchFace {
     	dc.setColor(DIAL_MARKER_COLOR, BACKGROUND_COLOR);
 
     	for (var i = 0; i < 60; i++) {
-    		dc.setPenWidth(DIAL_MARKER_WIDTHS);
-    		innerPtRadius = radius - DIAL_MARKER_MINUTE_LENGTH;
+
     		if ( 0 == i % 5 ) {
-    			dc.setPenWidth(4);
+    			dc.setPenWidth(DIAL_MARKER_HOUR_WIDTH);
     			innerPtRadius = radius - DIAL_MARKER_HOUR_LENGTH;
+    		} else {
+    			dc.setPenWidth(DIAL_MARKER_MINUTE_WIDTH);
+    		    innerPtRadius = radius - DIAL_MARKER_MINUTE_LENGTH;
     		}
+
     		edgePt  = getPointOnCircle( angle, radius );
     		innerPt = getPointOnCircle( angle, innerPtRadius );
     		dc.drawLine(
