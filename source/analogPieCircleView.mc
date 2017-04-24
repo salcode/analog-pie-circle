@@ -97,7 +97,7 @@ class analogPieCircleView extends Ui.WatchFace {
     }
 
     hidden function drawDial(dc) {
-    	var edgePt, innerPt, innerPtRadius;
+    	var edgePt, innerPt, innerPtRadius, edgePtRadius;
     	var angle = 0;
 
     	dc.setColor(DIAL_MARKER_COLOR, BACKGROUND_COLOR);
@@ -107,12 +107,14 @@ class analogPieCircleView extends Ui.WatchFace {
     		if ( 0 == i % 5 ) {
     			dc.setPenWidth(DIAL_MARKER_HOUR_WIDTH);
     			innerPtRadius = radius - DIAL_MARKER_HOUR_LENGTH;
+    			edgePtRadius  =  radius - ( DIAL_MARKER_HOUR_WIDTH / 2 );
     		} else {
     			dc.setPenWidth(DIAL_MARKER_MINUTE_WIDTH);
     		    innerPtRadius = radius - DIAL_MARKER_MINUTE_LENGTH;
+    		    edgePtRadius  = radius - ( DIAL_MARKER_MINUTE_WIDTH / 2 );
     		}
 
-    		edgePt  = getPointOnCircle( angle, radius );
+    		edgePt  = getPointOnCircle( angle, edgePtRadius );
     		innerPt = getPointOnCircle( angle, innerPtRadius );
     		dc.drawLine(
     			edgePt[0], edgePt[1],
