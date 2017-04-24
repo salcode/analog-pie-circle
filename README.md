@@ -28,7 +28,7 @@ $ connectiq
 ### Build the App
 
 ```
-$ monkeyc -o ./bin/analogPieCirlce.prg -m ./manifest.xml -z ./resources/strings/strings.xml;./resources/drawables/drawables.xml; ./source/analogPieCircleApp.mc -y ~/connectiq-sdk-mac-2.1.0/
+monkeyc -o bin/analogPieCircle.prg -w -y ~/connectiq-sdk-mac-2.1.0/developer_key -z resources/drawables/drawables.xml:resources/layouts/layout.xml:resources/strings/strings.xml -m manifest.xml source/analogPieCircleView.mc source/analogPieCircleApp.mc -d vivoactive_sim
 ```
 
 #### Error
